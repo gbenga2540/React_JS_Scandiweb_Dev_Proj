@@ -1,0 +1,103 @@
+.alert_main {
+    position: fixed;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    background-color: rgba($color: #000000, $alpha: 0.7);
+    z-index: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .alert_w {
+        position: relative;
+        background-color: var(--white);
+        min-width: 500px;
+        max-width: 500px;
+        min-height: 330px;
+        border-radius: 10px;
+        animation-name: anim;
+        animation-duration: 0.25s;
+        animation-delay: 0s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h1 {
+            font-family: Raleway, 'sans-serif';
+            font-weight: 700;
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-family: Raleway, 'sans-serif';
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        button {
+            width: 292px;
+            height: 52px;
+            margin-left: auto;
+            margin-right: auto;
+            cursor: pointer;
+            font-weight: 500;
+            outline: none;
+            margin-bottom: 20px;
+            border: 1px solid var(--black);
+            font-family: Raleway, 'sans-serif';
+            background-color: var(--white);
+            transition: all 150ms ease-in-out;
+            font-size: 17px;
+                
+            &:hover {
+                background-color: rgb(242, 242, 242);
+            }
+        }
+    }
+}
+
+@keyframes anim {
+    from {
+        transform: scale(0.8);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@media (max-width:720px) {
+    .alert_main {
+    
+        .alert_w {
+            min-width: 94vw;
+            max-width: 94vw;
+            min-height: 330px;
+
+            h1 {
+                font-size: 17px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+                max-width: 90%;
+            }
+
+            p {
+                margin-bottom: 45px;
+                font-size: 14px;
+                max-width: 80%;
+            }
+
+            button {
+                width: 65vw;
+                height: 40px;
+                margin-bottom: 16px;
+                font-size: 17px;
+            }
+        }
+    }
+}
