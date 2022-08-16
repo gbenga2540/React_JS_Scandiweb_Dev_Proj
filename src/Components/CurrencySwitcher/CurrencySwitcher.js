@@ -23,17 +23,11 @@ class CurrencySwitcher extends Component {
                 const json_data = await res.json();
                 const raw_data = json_data?.data?.currencies;
                 this.props.setAllCurrencies(raw_data);
-            })
+            });
     }
 
     componentDidMount = () => {
         this.getdata();
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (this.props.CurrentCurrency !== prevProps.CurrentCurrency) {
-            this.getdata();
-        }
     }
 
     render() {

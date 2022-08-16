@@ -12,24 +12,24 @@ class MiniCart extends Component {
         this.props.handle_CloseCartOrCurr();
     }
 
+    openCheckout = () => {
+        this.props.history?.push(`/checkout`);
+        this.props.handle_CloseCartOrCurr();
+    }
+
     render() {
         return (
             <section className='minicart_main'>
                 <p className='mc_m_p'><span>My Bag</span>, {this.props.TotalCarts} item{this.props.TotalCarts > 1 ? 's' : ''}</p>
                 <div className='mc_m_ci'>
-                    <Scrollbars style={{ width: '100%', height: 350 }}>
+                    <Scrollbars style={{ width: '100%', height: '350px' }}>
                         {this.props.UserCarts?.length > 0 &&
                             this.props.UserCarts?.map((item, i) =>
                                 <CartItem key={i} isMini={true} cart_info={item} cart_index={i} />
                             )
                         }
                         {this.props.UserCarts?.length <= 0 &&
-                            <p style={{
-                                textAlign: 'center',
-                                fontFamily: 'Raleway, sans-serif',
-                                paddingTop: '170px',
-                                fontWeight: 500
-                            }}>Your cart is Empty</p>
+                            <p className='mc_m_ec'>Your cart is Empty</p>
                         }
                     </Scrollbars>
                 </div>
@@ -42,7 +42,7 @@ class MiniCart extends Component {
                 </div>
                 <div className='mc_m_b'>
                     <button type='button' onClick={this.openCart}>VIEW BAG</button>
-                    <button className='mc_m_b_chkout'>CHECK OUT</button>
+                    <button type='button' className='mc_m_b_chkout' onClick={this.openCheckout}>CHECK OUT</button>
                 </div>
             </section>
         )

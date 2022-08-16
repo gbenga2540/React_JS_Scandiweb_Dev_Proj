@@ -47,82 +47,75 @@ class AppBar extends Component {
         this.getdata();
     }
 
-    componentDidUpdate = (prevProps) => {
-        if (this.props.CurrentCategory !== prevProps.CurrentCategory) {
-            this.getdata();
-        }
-        if (this.props.TotalCarts !== prevProps.TotalCarts) {
-            this.getdata();
-        }
-    }
-
     render() {
         return (
-            <div className='appbar_main'>
-                <span className='a_m_cat' onClick={this.props.handle_CloseCartOrCurr}>
-                    {this.props.AllCategories?.length > 0 &&
-                        this.props.AllCategories?.map((category, i) =>
-                            <span
-                                key={i}
-                                className='a_m_cat_nl'
-                                id={i === this.props.CurrentCategory ? 'a_m_cat_nl' : ''}
-                                onClick={() => {
-                                    this.props.setCurrentCategory(i);
-                                    if (this.props.location?.pathname !== "/products") {
-                                        this.props.history?.push(`/products`);
-                                    }
-                                }}
-                            >
-                                <p>{category.toUpperCase()}</p>
-                            </span>
-                        )}
-                </span>
-                <div className='a_m_img' onClick={this.props.handle_CloseCartOrCurr}>
-                    <img
-                        src={Logo}
-                        alt='ScandiWeb_Logo'
-                    />
-                </div>
-                <span className='a_m_cur_cart' onClick={this.props.handle_CloseCartOrCurr}>
-                    <span
-                        className="a_m_c_c_cur"
-                        onClick={() => this.props.setOpenCurrSwitcher(!this.props.openCurrSwitcher)}
-                    >
-                        <p>{this.props.AllCurrencies?.length > 0 &&
-                            this.props.AllCurrencies[this.props.CurrentCurrency]?.symbol
-                        }</p>
-                        <img
-                            src={ArrowDown}
-                            alt='Arr_Dwn'
-                            id={this.props.openCurrSwitcher ? 'img' : ''}
-                        />
+            <div className='appbar_main_max_w'>
+                <div className='appbar_main'>
+                    <span className='a_m_cat' onClick={this.props.handle_CloseCartOrCurr}>
+                        {this.props.AllCategories?.length > 0 &&
+                            this.props.AllCategories?.map((category, i) =>
+                                <span
+                                    key={i}
+                                    className='a_m_cat_nl'
+                                    id={i === this.props.CurrentCategory ? 'a_m_cat_nl' : ''}
+                                    onClick={() => {
+                                        this.props.setCurrentCategory(i);
+                                        if (this.props.location?.pathname !== "/products") {
+                                            this.props.history?.push(`/products`);
+                                        }
+                                    }}
+                                >
+                                    <p>{category.toUpperCase()}</p>
+                                </span>
+                            )}
                     </span>
-                    <span
-                        className='a_m_c_c_cart'
-                        onClick={() => this.props.setOpenMiniCartOverlay(!this.props.openMiniCartOverlay)}
-                    >
-                        {this.props.TotalCarts > 0 && <p>{this.props.TotalCarts}</p>}
+                    <div className='a_m_img' onClick={this.props.handle_CloseCartOrCurr}>
                         <img
-                            src={Cart}
-                            alt='cart'
+                            src={Logo}
+                            alt='ScandiWeb_Logo'
                         />
+                    </div>
+                    <span className='a_m_cur_cart' onClick={this.props.handle_CloseCartOrCurr}>
+                        <span
+                            className="a_m_c_c_cur"
+                            onClick={() => this.props.setOpenCurrSwitcher(!this.props.openCurrSwitcher)}
+                        >
+                            <p>{this.props.AllCurrencies?.length > 0 &&
+                                this.props.AllCurrencies[this.props.CurrentCurrency]?.symbol
+                            }</p>
+                            <img
+                                src={ArrowDown}
+                                alt='Arr_Dwn'
+                                id={this.props.openCurrSwitcher ? 'img' : ''}
+                            />
+                        </span>
+                        <span
+                            className='a_m_c_c_cart'
+                            onClick={() => this.props.setOpenMiniCartOverlay(!this.props.openMiniCartOverlay)}
+                        >
+                            {this.props.TotalCarts > 0 && <p>{this.props.TotalCarts}</p>}
+                            <img
+                                src={Cart}
+                                alt='cart'
+                            />
+                        </span>
                     </span>
-                </span>
-                <div
-                    className='a_m_cur_sw'
-                    id={this.props.openCurrSwitcher ? 'a_m_cur_sw' : ''}
-                >
-                    <CurrencySwitcher
-                        handle_CloseCartOrCurr={this.props.handle_CloseCartOrCurr}
-                    />
-                </div>
-                <div
-                    className='a_m_minicart'
-                    id={this.props.openMiniCartOverlay ? 'a_m_minicart' : ''}
-                >
-                    <MiniCart
-                        handle_CloseCartOrCurr={this.props.handle_CloseCartOrCurr}
-                    />
+                    <div
+                        className='a_m_cur_sw'
+                        id={this.props.openCurrSwitcher ? 'a_m_cur_sw' : ''}
+                    >
+                        <CurrencySwitcher
+                            handle_CloseCartOrCurr={this.props.handle_CloseCartOrCurr}
+                        />
+                    </div>
+                    <div
+                        className='a_m_minicart'
+                        id={this.props.openMiniCartOverlay ? 'a_m_minicart' : ''}
+                    >
+                        <MiniCart
+                            handle_CloseCartOrCurr={this.props.handle_CloseCartOrCurr}
+                        />
+                    </div>
                 </div>
             </div>
         )

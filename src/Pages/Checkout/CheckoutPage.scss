@@ -1,0 +1,38 @@
+.checkoutpage_main {
+    padding-top: 80px;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+
+    .cop_m_wrapper {
+        margin-left: 80px;
+        margin-right: 80px;
+
+        .cop_m_h {
+            font-size: 32px;
+            line-height: 40px;
+            font-weight: 700;
+            margin-top: 80px;
+            margin-bottom: 55px;
+            color: var(--black);
+        }
+    }
+}
+
+@media (max-width:720px) {
+    .checkoutpage_main {
+        padding-top: 60px;
+
+        .cop_m_wrapper {
+            margin-left: 15px;
+            margin-right: 15px;
+
+            .cop_m_h {
+                font-size: 22px;
+                line-height: 30px;
+                margin-top: 40px;
+                margin-bottom: 35px;
+            }
+        }
+    }
+}

@@ -6,6 +6,29 @@ import { connect } from 'react-redux';
 
 class ProductCard extends Component {
 
+    compareJSObjects = (Object_1, Object_2) => {
+        const Object_1_Length = Object.keys(Object_1).length;
+        const Object_2_Length = Object.keys(Object_2).length;
+
+        if (Object_1_Length === Object_2_Length) {
+            return Object.keys(Object_1).every(key => Object_2.hasOwnProperty(key) && Object_2[key] === Object_1[key]);
+        } else {
+            return false;
+        }
+    }
+
+    handleOpenPDP = () => {
+        this.props.history?.push(`/products/${this.props.product_info?.id}`)
+    }
+
+    handlePriceBasedOnCurr = () => {
+        if (this.props.product_info?.prices.length > 0) {
+            const current_currency_symbol = this.props.AllCurrencies[this.props.CurrentCurrency]?.symbol;
+            const currency_obj = this.props.product_info?.prices.filter(item => item?.currency?.symbol === current_currency_symbol);
+            return currency_obj[0]?.amount === undefined ? '' : currency_obj[0]?.amount;
+        }
+    }
+
     AddtoCart = () => {
         let CartItem = {};
 
@@ -19,13 +42,13 @@ class ProductCard extends Component {
         CartItem["quantity"] = 1;
 
         if (this.props.product_info?.attributes?.length > 0) {
-            if (window.confirm('This product contains attributes, would you like to select the first option of each attribute as a default before adding to cart?')) {
+            if (window.confirm('This Product contains Attributes, would you like the Default Attributes to be applied before adding to Cart?')) {
                 for (let i = 0; i < this.props.product_info?.attributes?.length; i++) {
                     CartItem[this.props.product_info?.attributes[i]?.id] = this.props.product_info?.attributes[i]?.items[0]?.value;
                 }
                 this.props.AddtoUserCart(CartItem);
             } else {
-                alert("Product was not added to cart!!!")
+                alert("Product was not added to Cart!!!");
             }
         } else {
             this.props.AddtoUserCart(CartItem);
@@ -33,42 +56,67 @@ class ProductCard extends Component {
     }
 
     handleAddtoCart = () => {
-        if (this.props.UserCarts?.length > 0) {
-            let ProductInCart = false;
-            for (let i = 0; i < this.props.UserCarts?.length; i++) {
-                if (this.props.UserCarts[i]?.id === this.props.product_info?.id) {
-                    ProductInCart = true;
-                }
-            }
+        if (this.props.product_info?.inStock) {
+            if (this.props.UserCarts?.length > 0) {
 
-            if (ProductInCart) {
                 if (this.props.product_info?.attributes?.length > 0) {
-                    if (window.confirm(`This product is available in your cart!. Would you like to add it to your cart once more?`)) {
+
+                    let CurrentProductAttrib = {};
+                    for (let i = 0; i < this.props.product_info?.attributes?.length; i++) {
+                        CurrentProductAttrib[this.props.product_info?.attributes[i]?.id] = this.props.product_info?.attributes[i]?.items[0]?.value
+                    }
+
+                    // Checks if the Product exists
+                    const productWithAttribs = this.props.UserCarts?.filter(item => item?.id === this.props.product_info?.id);
+
+                    // If the Product does not exist, add to cart
+                    if (productWithAttribs?.length > 0) {
+                        // set's Product with this Attribute to false
+                        let ProductInCart = false;
+
+                        // checks through the Products filtered
+                        for (let i = 0; i < productWithAttribs?.length; i++) {
+                            let CartProductAttrib = {};
+                            // Generates comparable Attribute Object
+                            for (let j = 0; j < productWithAttribs[i]?.attributes?.length; j++) {
+                                CartProductAttrib[productWithAttribs[i]?.attributes[j]?.id] = productWithAttribs[i]?.[productWithAttribs[i]?.attributes[j]?.id];
+                            }
+                            // Compares Generated Attribute Object with the Current Attribute Object Selected in the Desc Page
+                            if (this.compareJSObjects({ ...CartProductAttrib }, { ...CurrentProductAttrib })) {
+                                ProductInCart = true;
+                            }
+                        }
+
+                        // If the Product does not exist, add to cart
+                        if (ProductInCart) {
+                            if (window.confirm(`This Product is available in your Cart with the Default Attributes selected, would you like to view your Cart?`)) {
+                                this.props.history?.push(`/carts`);
+                            }
+                        } else {
+                            this.AddtoCart();
+                        }
+                    } else {
                         this.AddtoCart();
                     }
+
                 } else {
-                    if (window.confirm(`This product has no attribute and it's available in cart!. Would you like to view the cart page`)) {
-                        this.props.history?.push(`/carts`);
+                    // Checks if the Product exists
+                    const productsWithoutAttribs = this.props.UserCarts?.filter(item => item?.id === this.props.product_info?.id);
+                    // If the Product does not exist, add to cart
+                    if (productsWithoutAttribs?.length > 0) {
+                        if (window.confirm(`This Product is available in your Cart, would you like to view your Cart?`)) {
+                            this.props.history?.push(`/carts`);
+                        }
+                    } else {
+                        this.AddtoCart();
                     }
                 }
+
             } else {
                 this.AddtoCart();
             }
-
         } else {
-            this.AddtoCart();
-        }
-    }
-
-    handleOpenPDP = () => {
-        this.props.history?.push(`/products/${this.props.product_info?.id}`)
-    }
-
-    handlePriceBasedOnCurr = () => {
-        if (this.props.product_info?.prices.length > 0) {
-            const current_currency_symbol = this.props.AllCurrencies[this.props.CurrentCurrency]?.symbol;
-            const currency_obj = this.props.product_info?.prices.filter(item => item?.currency?.symbol === current_currency_symbol);
-            return currency_obj[0]?.amount === undefined ? '' : currency_obj[0]?.amount;
+            alert(`Product is OUT-OF-STOCK`);
         }
     }
 
@@ -135,7 +183,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        AddtoUserCart: (item) => dispatch({ type: "USER_CARTS", payload: item }),
+        AddtoUserCart: (item) => dispatch({ type: "ADD_USER_CARTS", payload: item }),
     }
 }
 

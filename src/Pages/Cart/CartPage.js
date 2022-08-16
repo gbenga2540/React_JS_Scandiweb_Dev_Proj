@@ -29,10 +29,6 @@ class CartPage extends Component {
                 className='cartpage_main'
                 onClick={this.props.handle_CloseCartOrCurr}
             >
-                <div
-                    className='cp_m_fade'
-                    id={this.props.openMiniCartOverlay ? 'cp_m_fade' : ''}
-                ></div>
                 <div className='cp_m_wrapper'>
                     <h1 className='cp_m_h'>CART</h1>
                     {this.props.UserCarts?.length > 0 && <hr className='cp_m_hr' />}
@@ -45,11 +41,7 @@ class CartPage extends Component {
                         )
                     }
                     {this.props.UserCarts?.length <= 0 &&
-                        <p style={{
-                            textAlign: 'left',
-                            fontFamily: 'Raleway, sans-serif',
-                            fontWeight: 500
-                        }}>Your cart is Empty</p>
+                        <p className='cp_m_ec'>Your cart is Empty</p>
                     }
                     {this.props.UserCarts?.length > 0 &&
                         <div className='cp_m_orders_sum'>

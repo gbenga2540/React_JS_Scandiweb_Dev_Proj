@@ -6,6 +6,7 @@ import AppBar from '../Components/AppBar/AppBar';
 import CategoryPage from '../Pages/Category/CategoryPage';
 import DescriptionPage from '../Pages/Description/DescriptionPage';
 import CartPage from '../Pages/Cart/CartPage';
+import CheckoutPage from '../Pages/Checkout/CheckoutPage';
 import MissingPage from '../Pages/Missing/MissingPage';
 
 class App extends Component {
@@ -18,19 +19,19 @@ class App extends Component {
   }
 
   setOpenCurrSwitcher = (state) => {
-    this.setState({ openCurrSwitcher: state })
+    this.setState({ openCurrSwitcher: state });
   }
 
   setOpenMiniCartOverlay = (state) => {
-    this.setState({ openMiniCartOverlay: state })
+    this.setState({ openMiniCartOverlay: state });
   }
 
   handle_CloseCartOrCurr = () => {
     if (this.state.openCurrSwitcher) {
-      this.setState({ openCurrSwitcher: false })
+      this.setState({ openCurrSwitcher: false });
     }
     if (this.state.openMiniCartOverlay) {
-      this.setState({ openMiniCartOverlay: false })
+      this.setState({ openMiniCartOverlay: false });
     }
   }
 
@@ -69,8 +70,11 @@ class App extends Component {
     this.total_cart_prices();
   }
   componentDidUpdate = (prevProps) => {
-    if (prevProps !== this.props) {
+    if (prevProps.UserCarts !== this.props.UserCarts) {
       this.total_no_of_cart_items();
+      this.total_cart_prices();
+    }
+    if (prevProps.CurrentCurrency !== this.props.CurrentCurrency) {
       this.total_cart_prices();
     }
   }
@@ -78,6 +82,11 @@ class App extends Component {
   render() {
     return (
       <div className='app_main'>
+        <div
+          className='app_m_fade'
+          id={this.state.openMiniCartOverlay ? 'app_m_fade' : ''}
+          onClick={this.handle_CloseCartOrCurr}
+        ></div>
         <AppBar
           openCurrSwitcher={this.state.openCurrSwitcher}
           openMiniCartOverlay={this.state.openMiniCartOverlay}
@@ -85,33 +94,36 @@ class App extends Component {
           setOpenMiniCartOverlay={this.setOpenMiniCartOverlay}
           handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
         />
-        <Switch>
-          <Redirect exact={true} from="/" to="/products" />
-          <Route exact path="/products">
-            <CategoryPage
-              handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
-              openMiniCartOverlay={this.state.openMiniCartOverlay}
-            />
-          </Route>
-          <Route path="/products/:id">
-            <DescriptionPage
-              handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
-              openMiniCartOverlay={this.state.openMiniCartOverlay}
-            />
-          </Route>
-          <Route path="/carts">
-            <CartPage
-              handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
-              openMiniCartOverlay={this.state.openMiniCartOverlay}
-            />
-          </Route>
-          <Route path="*">
-            <MissingPage
-              handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
-              openMiniCartOverlay={this.state.openMiniCartOverlay}
-            />
-          </Route>
-        </Switch>
+        <div className='app_w'>
+          <Switch>
+            <Redirect exact={true} from="/" to="/products" />
+            <Route exact path="/products">
+              <CategoryPage
+                handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
+              />
+            </Route>
+            <Route path="/products/:id">
+              <DescriptionPage
+                handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
+              />
+            </Route>
+            <Route path="/carts">
+              <CartPage
+                handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
+              />
+            </Route>
+            <Route path="/checkout">
+              <CheckoutPage
+                handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
+              />
+            </Route>
+            <Route path="*">
+              <MissingPage
+                handle_CloseCartOrCurr={this.handle_CloseCartOrCurr}
+              />
+            </Route>
+          </Switch>
+        </div>
       </div>
     )
   }

@@ -14,14 +14,7 @@ class MissingPage extends Component {
 
     render() {
         return (
-            <div
-                onClick={() => this.props.handle_CloseCartOrCurr()}
-                className='missingpage_main'
-            >
-                <div
-                    className='mp_m_fade'
-                    id={this.props.openMiniCartOverlay ? 'mp_m_fade' : ''}
-                ></div>
+            <div onClick={() => this.props.handle_CloseCartOrCurr()} className='missingpage_main'>
                 <h1>Page Not Found!!!</h1>
                 <p>Please, click the button below to get redirected to the Product Page.</p>
                 <button onClick={this.Redirect}>Product Page</button>

@@ -35,8 +35,8 @@ export const user_carts = (state = [], action) => {
             let state_remove = state;
             const new_state = state_remove.filter((item, index) => index !== action.payload);
             return new_state;
-        case "USER_CARTS":
-            return [...state, action.payload];
+        case "ADD_USER_CARTS":
+            return [action.payload, ...state];
         default:
             return state;
     }

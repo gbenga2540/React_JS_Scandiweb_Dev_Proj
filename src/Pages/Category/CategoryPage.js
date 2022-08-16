@@ -87,10 +87,6 @@ class CategoryPage extends Component {
                 className='categorypage_main'
                 onClick={this.props.handle_CloseCartOrCurr}
             >
-                <div
-                    className='cp_m_fade'
-                    id={this.props.openMiniCartOverlay ? 'cp_m_fade' : ''}
-                ></div>
                 {this.props.ProductList?.length > 0 && <div>
                     <h1 className='cp_m_h1'>
                         {this.props.AllCategories?.length > 0 &&
@@ -129,10 +125,7 @@ class CategoryPage extends Component {
                     <p className='cp_m_loading'>Loading Products...</p>
                 }
                 {this.state.error &&
-                    <p
-                        className='cp_m_loading'
-                        style={{ color: 'red' }}
-                    >Error Loading Products...</p>
+                    <p className='cp_m_loading' id='cp_m_loading'>Error Loading Products...</p>
                 }
             </main>
         )

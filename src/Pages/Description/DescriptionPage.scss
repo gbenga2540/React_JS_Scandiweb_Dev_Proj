@@ -5,21 +5,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
-
-    .dp_m_fade {
-        position: absolute;
-        width: 100%;
-        min-height: calc(100vh - 80px);
-        height: 100%;
-        z-index: -1;
-        background-color: #393748;
-        opacity: 0;
-        transition: all 150ms ease-in-out;
-    }
-    #dp_m_fade {
-        z-index: 2;
-        opacity: 0.22;
-    }
+    justify-content: center;
 
     .dp_m_w {
         display: flex;
@@ -234,17 +220,17 @@
         font-weight: 500;
         font-size: 15px;
     }
+
+    #dp_m_loading {
+        color: red;
+    }
 }
 
-@media (max-width:720px) {
+@media (max-width:1160px) {
 
     .descpage_main {
         padding-top: 60px;
         padding-bottom: 100px;
-
-        .dp_m_fade {
-            min-height: calc(100vh - 60px);
-        }
 
         .dp_m_w {
             display: flex;

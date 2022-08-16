@@ -22,6 +22,17 @@ class DescriptionPage extends Component {
         }
     }
 
+    compareJSObjects = (Object_1, Object_2) => {
+        const Object_1_Length = Object.keys(Object_1).length;
+        const Object_2_Length = Object.keys(Object_2).length;
+
+        if (Object_1_Length === Object_2_Length) {
+            return Object.keys(Object_1).every(key => Object_2.hasOwnProperty(key) && Object_2[key] === Object_1[key]);
+        } else {
+            return false;
+        }
+    }
+
     getdata = async () => {
         await fetch(back_end_endpoint(), {
             method: 'POST',
@@ -96,26 +107,55 @@ class DescriptionPage extends Component {
     }
 
     handleAddtoCart = () => {
-        if (this.props.UserCarts?.length > 0) {
-            let ProductInCart = false;
-            for (let i = 0; i < this.props.UserCarts?.length; i++) {
-                if (this.props.UserCarts[i]?.id === this.props.CurrentProduct?.id) {
-                    ProductInCart = true;
-                }
-            }
+        if (this.props.CurrentProduct?.inStock) {
+            if (this.props.UserCarts?.length > 0) {
 
-            if (ProductInCart) {
                 if (this.props.CurrentProduct?.attributes?.length > 0) {
-                    this.setState({ alertType: 1, openAlert: true });
+                    // Checks if the Product exists
+                    const productWithAttribs = this.props.UserCarts?.filter(item => item?.id === this.props.CurrentProduct?.id);
+                    // If the Product does not exist, add to cart
+                    if (productWithAttribs?.length > 0) {
+                        // set's Product with this Attribute to false
+                        let ProductInCart = false;
+
+                        // checks through the Products filtered
+                        for (let i = 0; i < productWithAttribs?.length; i++) {
+                            let CartProductAttrib = {};
+                            // Generates comparable Attribute Object
+                            for (let j = 0; j < productWithAttribs[i]?.attributes?.length; j++) {
+                                CartProductAttrib[productWithAttribs[i]?.attributes[j]?.id] = productWithAttribs[i]?.[productWithAttribs[i]?.attributes[j]?.id];
+                            }
+                            // Compares Generated Attribute Object with the Current Attribute Object Selected in the Desc Page
+                            if (this.compareJSObjects({ ...CartProductAttrib }, { ...this.state.productAttribs })) {
+                                ProductInCart = true;
+                            }
+                        }
+
+                        // If the Product does not exist, add to cart
+                        if (ProductInCart) {
+                            this.setState({ alertType: 2, openAlert: true });
+                        } else {
+                            this.AddtoCart();
+                        }
+
+                    } else {
+                        this.AddtoCart();
+                    }
                 } else {
-                    this.setState({ alertType: 2, openAlert: true });
+                    // Checks if the Product exists
+                    const productsWithoutAttribs = this.props.UserCarts?.filter(item => item?.id === this.props.CurrentProduct?.id);
+                    // If the Product does not exist, add to cart
+                    if (productsWithoutAttribs?.length > 0) {
+                        this.setState({ alertType: 1, openAlert: true });
+                    } else {
+                        this.AddtoCart();
+                    }
                 }
             } else {
                 this.AddtoCart();
             }
-
         } else {
-            this.AddtoCart();
+            alert(`Product is OUT-OF-STOCK`);
         }
     }
 
@@ -123,13 +163,13 @@ class DescriptionPage extends Component {
         switch (this.state.alertType) {
             case 1:
                 return {
-                    heading: "This product is available in your cart!",
-                    sub_heading: "Would you like to add it to your cart once more?",
+                    heading: "This Product is available in your Cart!",
+                    sub_heading: "What would you like to do?",
                     actions: [
                         {
-                            name: "Yes, I'd like to",
+                            name: "View Cart",
                             handleFunc: () => {
-                                this.AddtoCart();
+                                this.props.history?.push(`/carts`);
                                 this.setState({ openAlert: false });
                             }
                         },
@@ -143,7 +183,7 @@ class DescriptionPage extends Component {
                 }
             case 2:
                 return {
-                    heading: "This product has no attribute and it's available in cart!",
+                    heading: "This Product is available in your Cart with the current Attributes selected!",
                     sub_heading: "What would you like to do?",
                     actions: [
                         {
@@ -174,15 +214,6 @@ class DescriptionPage extends Component {
         window.scrollTo(0, 0);
     }
 
-    componentDidUpdate = (prevProps) => {
-        if (prevProps.match?.params?.id !== this.props.match?.params?.id) {
-            this.props.ClearCurrentProduct();
-            this.setState({ productAttribs: {} });
-            this.getdata();
-            window.scrollTo(0, 0);
-        }
-    }
-
     render() {
         return (
             <main
@@ -190,10 +221,6 @@ class DescriptionPage extends Component {
                 onClick={this.props.handle_CloseCartOrCurr}
             >
                 {this.state.openAlert && <Alert structure={this.alertStructure()} />}
-                <div
-                    className='dp_m_fade'
-                    id={this.props.openMiniCartOverlay ? 'dp_m_fade' : ''}
-                ></div>
                 {this.props.CurrentProduct &&
                     <div className='dp_m_w'>
                         <div className='dp_m_1'>
@@ -282,10 +309,7 @@ class DescriptionPage extends Component {
                     <p className='dp_m_loading'>Loading Product Description...</p>
                 }
                 {this.state.error &&
-                    <p
-                        className='dp_m_loading'
-                        style={{ color: 'red' }}
-                    >Error Loading Product Description...</p>
+                    <p className='dp_m_loading' id='dp_m_loading'>Error Loading Product Description...</p>
                 }
             </main>
         )
@@ -303,7 +327,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        AddtoUserCart: (item) => dispatch({ type: "USER_CARTS", payload: item }),
+        AddtoUserCart: (item) => dispatch({ type: "ADD_USER_CARTS", payload: item }),
         SetCurrentProduct: (product) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: product }),
         ClearCurrentProduct: () => dispatch({ type: "CLEAR_CURRENT_PRODUCT" })
     }

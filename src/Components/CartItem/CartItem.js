@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './CartItem.scss';
 import { connect } from 'react-redux';
-import { GET_PRODUCT_BY_ID } from '../../GraphQL/Queries';
+// import { GET_PRODUCT_BY_ID } from '../../GraphQL/Queries';
+// import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
 import ArrowLeft from '../../Images/ArrowLeft.png';
 import AddSign from '../../Images/AddSign.png';
 import SubtractSign from '../../Images/SubtractSign.png';
-import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
 
 class CartItem extends Component {
     constructor(props) {
@@ -71,61 +71,61 @@ class CartItem extends Component {
         return attrib[0]?.attributes;
     }
 
-    handle_Update_Attribute = (attrib_name, attrib_value) => {
-        const prevData = this.props.UserCarts[this.props.cart_index];
-        const newData = {
-            ...prevData
-        };
-        newData[attrib_name] = attrib_value;
-        this.props.UpdateUserCart(this.props.cart_index, { ...newData });
-    }
+    // handle_Update_Attribute = (attrib_name, attrib_value) => {
+    //     const prevData = this.props.UserCarts[this.props.cart_index];
+    //     const newData = {
+    //         ...prevData
+    //     };
+    //     newData[attrib_name] = attrib_value;
+    //     this.props.UpdateUserCart(this.props.cart_index, { ...newData });
+    // }
 
     handle_Remove_Cart_Item = () => {
         this.props.RemoveCartItem(this.props.cart_index);
     }
 
-    getdata = async () => {
-        await fetch(back_end_endpoint(), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "operationName": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).operationName,
-                "query": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).query,
-                "variables": {}
-            })
-        })
-            .catch(error => console.error(error))
-            .then(async (res) => {
-                const json_data = await res.json();
-                const raw_data = json_data?.data?.product;
-                const prevData = this.props.UserCarts[this.props.cart_index];
-                const newData = {
-                    ...prevData,
-                    quantity: prevData?.quantity <= 1 ? 1 : prevData?.quantity,
-                    brand: raw_data?.brand,
-                    name: raw_data?.name,
-                    gallery: raw_data?.gallery,
-                    inStock: raw_data?.inStock,
-                    prices: raw_data?.prices
-                };
-                for (let i = 0; i < raw_data?.attributes?.length; i++) {
-                    newData[raw_data?.attributes[i]?.id] = prevData[raw_data?.attributes[i]?.id];
-                }
-                this.props.UpdateUserCart(this.props.cart_index, { ...newData });
-            })
-    }
+    // getdata = async () => {
+    //     await fetch(back_end_endpoint(), {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             "operationName": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).operationName,
+    //             "query": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).query,
+    //             "variables": {}
+    //         })
+    //     })
+    //         .catch(error => console.error(error))
+    //         .then(async (res) => {
+    //             const json_data = await res.json();
+    //             const raw_data = json_data?.data?.product;
+    //             const prevData = this.props.UserCarts[this.props.cart_index];
+    //             const newData = {
+    //                 ...prevData,
+    //                 quantity: prevData?.quantity <= 1 ? 1 : prevData?.quantity,
+    //                 brand: raw_data?.brand,
+    //                 name: raw_data?.name,
+    //                 gallery: raw_data?.gallery,
+    //                 inStock: raw_data?.inStock,
+    //                 prices: raw_data?.prices
+    //             };
+    //             for (let i = 0; i < raw_data?.attributes?.length; i++) {
+    //                 newData[raw_data?.attributes[i]?.id] = prevData[raw_data?.attributes[i]?.id];
+    //             }
+    //             this.props.UpdateUserCart(this.props.cart_index, { ...newData });
+    //         });
+    // }
 
-    componentDidMount = () => {
-        this.getdata();
-    }
+    // componentDidMount = () => {
+    //     this.getdata();
+    // }
 
-    componentDidUpdate = (prevProps) => {
-        if (this.props.TotalCarts !== prevProps.TotalCarts) {
-            this.getdata();
-        }
-    }
+    // componentDidUpdate = (prevProps) => {
+    //     if (this.props.TotalCarts !== prevProps.TotalCarts) {
+    //         this.getdata();
+    //     }
+    // }
 
     render() {
         return (
@@ -149,7 +149,7 @@ class CartItem extends Component {
                                                 <h3
                                                     key={index}
                                                     id={values?.value === this.props.UserCarts?.[this.props.cart_index]?.[item?.name] ? 'h3' : ''}
-                                                    onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
+                                                // onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
                                                 >{values?.value}</h3>
                                             )
                                         }
@@ -159,7 +159,7 @@ class CartItem extends Component {
                                                 <span
                                                     key={index}
                                                     id={values?.value === this.props.UserCarts?.[this.props.cart_index]?.[item?.name] ? 'span' : ''}
-                                                    onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
+                                                // onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
                                                 >
                                                     <div style={{ backgroundColor: values?.value }}></div>
                                                 </span>
@@ -209,11 +209,9 @@ class CartItem extends Component {
                     {!this.props.isMini && !this.props.cart_info?.inStock &&
                         <p className='ci_m_p_oof'>OUT OF STOCK</p>
                     }
-                    {!this.props.isMini &&
-                        <button className='ci_m_btn_rmv' onClick={this.handle_Remove_Cart_Item}>
-                            REMOVE
-                        </button>
-                    }
+                    <button className='ci_m_btn_rmv' onClick={this.handle_Remove_Cart_Item}>
+                        REMOVE
+                    </button>
                 </div>
             </section>
         )
