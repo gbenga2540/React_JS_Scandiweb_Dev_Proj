@@ -4,11 +4,11 @@ import Logo from '../../Images/Logo.svg';
 import ArrowDown from '../../Images/ArrowDown.svg';
 import Cart from '../../Images/Cart.svg';
 import { connect } from 'react-redux';
-import { GET_CATEGORIES } from '../../GraphQL/Queries';
 import CurrencySwitcher from '../CurrencySwitcher/CurrencySwitcher';
 import MiniCart from '../MiniCart/MiniCart';
 import { withRouter } from 'react-router-dom';
 import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
+import { GET_CATEGORIES } from '../../GraphQL/Queries';
 
 class AppBar extends Component {
 
@@ -93,7 +93,9 @@ class AppBar extends Component {
                             className='a_m_c_c_cart'
                             onClick={() => this.props.setOpenMiniCartOverlay(!this.props.openMiniCartOverlay)}
                         >
-                            {this.props.TotalCarts > 0 && <p>{this.props.TotalCarts}</p>}
+                            {this.props.TotalCarts > 0 &&
+                                <p>{this.props.TotalCarts}</p>
+                            }
                             <img
                                 src={Cart}
                                 alt='cart'

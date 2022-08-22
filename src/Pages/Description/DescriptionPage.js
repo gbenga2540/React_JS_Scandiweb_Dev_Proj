@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import './DescriptionPage.scss';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { GET_PRODUCT_BY_ID } from '../../GraphQL/Queries';
 import parse from "html-react-parser";
-import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
+import styled from 'styled-components';
 import Alert from '../../Components/Alert/Alert';
+import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
+import { GET_PRODUCT_BY_ID } from '../../GraphQL/Queries';
 
 class DescriptionPage extends Component {
 
@@ -16,7 +17,6 @@ class DescriptionPage extends Component {
             productAttribs: {},
             galleryIndex: 0,
             ViewMoreDesc: false,
-            error: false,
             openAlert: false,
             alertType: 1
         }
@@ -47,7 +47,6 @@ class DescriptionPage extends Component {
         })
             .catch(error => {
                 console.error(error);
-                this.setState({ error: true });
             })
             .then(async (res) => {
                 const json_data = await res.json();
@@ -60,9 +59,6 @@ class DescriptionPage extends Component {
                         prev_state[a_id] = a_val;
                         this.setState({ productAttribs: { ...prev_state } });
                     }
-                }
-                if (raw_data) {
-                    this.setState({ error: false });
                 }
                 this.props.SetCurrentProduct(raw_data);
             })
@@ -215,6 +211,14 @@ class DescriptionPage extends Component {
     }
 
     render() {
+        const DescPAC = styled.div`
+            background: ${props => props.bgc_value};
+            width: 32px;
+            min-width: 32px;
+            height: 32px;
+            min-height: 32px;
+        `;
+
         return (
             <main
                 className='descpage_main'
@@ -269,7 +273,9 @@ class DescriptionPage extends Component {
                                                         id={values?.value === this.state.productAttribs?.[item?.id] ? 'span' : ''}
                                                         onClick={() => this.setProductAttributes(item?.id, values?.value)}
                                                     >
-                                                        <div style={{ backgroundColor: values?.value }}></div>
+                                                        <DescPAC
+                                                            bgc_value={values?.value}
+                                                        ></DescPAC>
                                                     </span>
                                                 )
                                             }
@@ -305,11 +311,8 @@ class DescriptionPage extends Component {
                         </div>
                     </div>
                 }
-                {!this.props.CurrentProduct && !this.state.error &&
+                {!this.props.CurrentProduct &&
                     <p className='dp_m_loading'>Loading Product Description...</p>
-                }
-                {this.state.error &&
-                    <p className='dp_m_loading' id='dp_m_loading'>Error Loading Product Description...</p>
                 }
             </main>
         )
@@ -318,9 +321,11 @@ class DescriptionPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        CurrentCurrency: state.CurrentCurrency,
-        AllCurrencies: state.AllCurrencies,
+        AllCategories: state.AllCategories,
+        CurrentCategory: state.CurrentCategory,
         UserCarts: state.UserCarts,
+        AllCurrencies: state.AllCurrencies,
+        CurrentCurrency: state.CurrentCurrency,
         CurrentProduct: state.CurrentProduct
     }
 }
@@ -328,8 +333,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         AddtoUserCart: (item) => dispatch({ type: "ADD_USER_CARTS", payload: item }),
-        SetCurrentProduct: (product) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: product }),
-        ClearCurrentProduct: () => dispatch({ type: "CLEAR_CURRENT_PRODUCT" })
+        ClearCurrentProduct: () => dispatch({ type: "CLEAR_CURRENT_PRODUCT" }),
+        SetCurrentProduct: (product) => dispatch({ type: "SET_CURRENT_PRODUCT", payload: product })
     }
 }
 

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './CartItem.scss';
 import { connect } from 'react-redux';
-// import { GET_PRODUCT_BY_ID } from '../../GraphQL/Queries';
-// import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
+import styled from 'styled-components';
 import ArrowLeft from '../../Images/ArrowLeft.png';
 import AddSign from '../../Images/AddSign.png';
 import SubtractSign from '../../Images/SubtractSign.png';
@@ -71,63 +70,34 @@ class CartItem extends Component {
         return attrib[0]?.attributes;
     }
 
-    // handle_Update_Attribute = (attrib_name, attrib_value) => {
-    //     const prevData = this.props.UserCarts[this.props.cart_index];
-    //     const newData = {
-    //         ...prevData
-    //     };
-    //     newData[attrib_name] = attrib_value;
-    //     this.props.UpdateUserCart(this.props.cart_index, { ...newData });
-    // }
-
     handle_Remove_Cart_Item = () => {
         this.props.RemoveCartItem(this.props.cart_index);
     }
 
-    // getdata = async () => {
-    //     await fetch(back_end_endpoint(), {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             "operationName": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).operationName,
-    //             "query": GET_PRODUCT_BY_ID({ ProductID: this.props.cart_info?.id }).query,
-    //             "variables": {}
-    //         })
-    //     })
-    //         .catch(error => console.error(error))
-    //         .then(async (res) => {
-    //             const json_data = await res.json();
-    //             const raw_data = json_data?.data?.product;
-    //             const prevData = this.props.UserCarts[this.props.cart_index];
-    //             const newData = {
-    //                 ...prevData,
-    //                 quantity: prevData?.quantity <= 1 ? 1 : prevData?.quantity,
-    //                 brand: raw_data?.brand,
-    //                 name: raw_data?.name,
-    //                 gallery: raw_data?.gallery,
-    //                 inStock: raw_data?.inStock,
-    //                 prices: raw_data?.prices
-    //             };
-    //             for (let i = 0; i < raw_data?.attributes?.length; i++) {
-    //                 newData[raw_data?.attributes[i]?.id] = prevData[raw_data?.attributes[i]?.id];
-    //             }
-    //             this.props.UpdateUserCart(this.props.cart_index, { ...newData });
-    //         });
-    // }
-
-    // componentDidMount = () => {
-    //     this.getdata();
-    // }
-
-    // componentDidUpdate = (prevProps) => {
-    //     if (this.props.TotalCarts !== prevProps.TotalCarts) {
-    //         this.getdata();
-    //     }
-    // }
-
     render() {
+        const CartPACMiniT = styled.div`
+            background: ${props => props.bgc_value};
+            width: 16px;
+            min-width: 16px;
+            height: 16px;
+            min-height: 16px;
+        `;
+
+        const CartPACMiniF = styled.div`
+            background: ${props => props.bgc_value};
+            width: 32px;
+            min-width: 32px;
+            height: 32px;
+            min-height: 32px;
+
+            @media (max-width:720px) {
+                width: 22px;
+                min-width: 22px;
+                height: 22px;
+                min-height: 22px;
+            }
+        `;
+
         return (
             <section className='cart_item_main' id={this.props.isMini ? '' : 'cart_item_main'}>
                 <div className='ci_m_w'>
@@ -149,7 +119,6 @@ class CartItem extends Component {
                                                 <h3
                                                     key={index}
                                                     id={values?.value === this.props.UserCarts?.[this.props.cart_index]?.[item?.name] ? 'h3' : ''}
-                                                // onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
                                                 >{values?.value}</h3>
                                             )
                                         }
@@ -159,9 +128,19 @@ class CartItem extends Component {
                                                 <span
                                                     key={index}
                                                     id={values?.value === this.props.UserCarts?.[this.props.cart_index]?.[item?.name] ? 'span' : ''}
-                                                // onClick={() => this.handle_Update_Attribute(item?.name, values?.value)}
                                                 >
-                                                    <div style={{ backgroundColor: values?.value }}></div>
+                                                    {this.props.isMini &&
+                                                        <CartPACMiniT
+                                                            bgc_value={values?.value}
+                                                        >
+                                                        </CartPACMiniT>
+                                                    }
+                                                    {!this.props.isMini &&
+                                                        <CartPACMiniF
+                                                            bgc_value={values?.value}
+                                                        >
+                                                        </CartPACMiniF>
+                                                    }
                                                 </span>
                                             )
                                         }
@@ -220,7 +199,6 @@ class CartItem extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        TotalCarts: state.TotalCarts,
         CurrentCurrency: state.CurrentCurrency,
         AllCurrencies: state.AllCurrencies,
         UserCarts: state.UserCarts

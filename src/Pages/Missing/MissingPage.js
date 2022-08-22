@@ -9,7 +9,7 @@ class MissingPage extends Component {
     }
 
     componentDidMount = () => {
-        document.title = 'Scandiweb Dev Test | Misiing';
+        document.title = 'Scandiweb Dev Test | Missing';
     }
 
     render() {

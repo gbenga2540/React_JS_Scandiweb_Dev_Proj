@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './CurrencySwitcher.scss';
 import { connect } from 'react-redux';
-import { GET_CURRENCIES } from '../../GraphQL/Queries';
 import { back_end_endpoint } from '../../Configs/BackEndEndpoint';
+import { GET_CURRENCIES } from '../../GraphQL/Queries';
 
 class CurrencySwitcher extends Component {
 
@@ -19,7 +19,7 @@ class CurrencySwitcher extends Component {
             })
         })
             .catch(error => console.error(error))
-            .then(async (res) => {
+            .then(async res => {
                 const json_data = await res.json();
                 const raw_data = json_data?.data?.currencies;
                 this.props.setAllCurrencies(raw_data);

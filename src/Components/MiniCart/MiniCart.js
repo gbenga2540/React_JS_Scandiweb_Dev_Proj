@@ -3,7 +3,8 @@ import './MiniCart.scss';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import CartItem from '../CartItem/CartItem';
-import { Scrollbars } from 'react-custom-scrollbars-2'
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 
 class MiniCart extends Component {
 
@@ -22,7 +23,7 @@ class MiniCart extends Component {
             <section className='minicart_main'>
                 <p className='mc_m_p'><span>My Bag</span>, {this.props.TotalCarts} item{this.props.TotalCarts > 1 ? 's' : ''}</p>
                 <div className='mc_m_ci'>
-                    <Scrollbars style={{ width: '100%', height: '350px' }}>
+                    <SimpleBar forceVisible="y" autoHide={false} className='mc_m_sb'>
                         {this.props.UserCarts?.length > 0 &&
                             this.props.UserCarts?.map((item, i) =>
                                 <CartItem key={i} isMini={true} cart_info={item} cart_index={i} />
@@ -31,7 +32,7 @@ class MiniCart extends Component {
                         {this.props.UserCarts?.length <= 0 &&
                             <p className='mc_m_ec'>Your cart is Empty</p>
                         }
-                    </Scrollbars>
+                    </SimpleBar>
                 </div>
                 <div className='mc_m_t'>
                     <p>Total</p>

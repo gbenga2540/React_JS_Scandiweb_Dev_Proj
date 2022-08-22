@@ -21,7 +21,16 @@
     .mc_m_ci {
         display: flex;
         flex-direction: column;
+        height: 350px;
         max-height: 350px;
+
+        .simplebar-scrollbar::before {
+            background-color: rgb(150, 150, 150);
+        }
+
+        .mc_m_sb {
+            max-height: 350px;
+        }
 
         .mc_m_ec {
             text-align: center;

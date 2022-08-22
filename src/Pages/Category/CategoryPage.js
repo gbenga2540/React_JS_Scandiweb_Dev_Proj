@@ -13,9 +13,22 @@ class CategoryPage extends Component {
         this.state = {
             max_product_per_page: 6,
             p_first_index: 0,
-            p_last_index: 6,
-            error: false
+            p_last_index: 6
         }
+    }
+
+    decreaseProductFilter = () => {
+        if (this.state.p_first_index > 0) {
+            this.setState({ p_first_index: this.state.p_first_index - this.state.max_product_per_page, p_last_index: this.state.p_last_index - this.state.max_product_per_page });
+        }
+        window.scrollTo(0, 0);
+    }
+
+    increaseProductFilter = () => {
+        if (this.state.p_last_index < this.props.ProductList?.length) {
+            this.setState({ p_first_index: this.state.p_first_index + this.state.max_product_per_page, p_last_index: this.state.p_last_index + this.state.max_product_per_page });
+        }
+        window.scrollTo(0, 0);
     }
 
     getdata = async () => {
@@ -33,32 +46,16 @@ class CategoryPage extends Component {
             })
                 .catch(error => {
                     console.error(error);
-                    this.setState({ error: true });
                 })
                 .then(async (res) => {
                     const json_data = await res.json();
                     const raw_data = json_data?.data?.category;
                     this.props.SetProductList(raw_data?.products);
                     if (this.props.ProductList?.length > 0) {
-                        this.setState({ error: false });
                     }
                     this.setState({ p_first_index: 0, p_last_index: this.state.max_product_per_page });
                 })
         }
-    }
-
-    decreaseProductFilter = () => {
-        if (this.state.p_first_index > 0) {
-            this.setState({ p_first_index: this.state.p_first_index - this.state.max_product_per_page, p_last_index: this.state.p_last_index - this.state.max_product_per_page });
-        }
-        window.scrollTo(0, 0);
-    }
-
-    increaseProductFilter = () => {
-        if (this.state.p_last_index < this.props.ProductList?.length) {
-            this.setState({ p_first_index: this.state.p_first_index + this.state.max_product_per_page, p_last_index: this.state.p_last_index + this.state.max_product_per_page });
-        }
-        window.scrollTo(0, 0);
     }
 
     handle_Update = () => {
@@ -121,11 +118,8 @@ class CategoryPage extends Component {
                     </div>
                 </div>
                 }
-                {this.props.ProductList?.length < 0 && !this.state.error &&
+                {this.props.ProductList?.length < 0 &&
                     <p className='cp_m_loading'>Loading Products...</p>
-                }
-                {this.state.error &&
-                    <p className='cp_m_loading' id='cp_m_loading'>Error Loading Products...</p>
                 }
             </main>
         )
