@@ -1,3 +1,3 @@
 export const back_end_endpoint = () => {
-    return "http://localhost:4000/";
+    return process.env.REACT_APP_BACKEND_ENDPOINT;
 }
