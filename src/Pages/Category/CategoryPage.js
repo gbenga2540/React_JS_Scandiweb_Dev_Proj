@@ -70,9 +70,6 @@ class CategoryPage extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.AllCategories !== this.props.AllCategories) {
-            this.handle_Update();
-        }
         if (prevProps.CurrentCategory !== this.props.CurrentCategory) {
             this.handle_Update();
         }
