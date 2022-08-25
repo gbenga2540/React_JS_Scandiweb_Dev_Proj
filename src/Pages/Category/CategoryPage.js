@@ -83,6 +83,9 @@ class CategoryPage extends Component {
             if (this.state.error) {
                 this.handle_Update();
             }
+            if (this.props.ProductList?.length <= 0) {
+                this.handle_Update();
+            }
         }
     }
 
