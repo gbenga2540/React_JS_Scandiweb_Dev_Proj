@@ -32,8 +32,8 @@ class CategoryPage extends Component {
         window.scrollTo(0, 0);
     }
 
-    getdata = async () => {
-        if (this.props.AllCategories.length > 0) {
+    getdata = () => {
+        const load_products = async () => {
             await fetch(back_end_endpoint(), {
                 method: 'POST',
                 headers: {
@@ -53,14 +53,21 @@ class CategoryPage extends Component {
                     const json_data = await res.json();
                     const raw_data = json_data?.data?.category;
                     this.props.SetProductList(raw_data?.products);
-                    if (this.props.ProductList?.length > 0) {
-                    }
                     this.setState({
                         p_first_index: 0,
                         p_last_index: this.state.max_product_per_page,
                         l_error: false
                     });
-                })
+                });
+        }
+
+        if (this.props.AllCategories.length > 0) {
+            load_products();
+        } else {
+            // Waits for 2.3s for the category name to load
+            setTimeout(async () => {
+                load_products();
+            }, 2300)
         }
     }
 
