@@ -18,7 +18,7 @@ class ProductCard extends Component {
     }
 
     handleOpenPDP = () => {
-        this.props.history?.push(`/products/${this.props.product_info?.id}`)
+        this.props.history?.push(`/products/${this.props.product_info?.id}`);
     }
 
     handlePriceBasedOnCurr = () => {

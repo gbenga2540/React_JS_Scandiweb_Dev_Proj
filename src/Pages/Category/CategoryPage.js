@@ -13,7 +13,8 @@ class CategoryPage extends Component {
         this.state = {
             max_product_per_page: 6,
             p_first_index: 0,
-            p_last_index: 6
+            p_last_index: 6,
+            l_error: false
         }
     }
 
@@ -45,6 +46,7 @@ class CategoryPage extends Component {
                 })
             })
                 .catch(error => {
+                    this.setState({ l_error: true });
                     console.error(error);
                 })
                 .then(async (res) => {
@@ -53,12 +55,17 @@ class CategoryPage extends Component {
                     this.props.SetProductList(raw_data?.products);
                     if (this.props.ProductList?.length > 0) {
                     }
-                    this.setState({ p_first_index: 0, p_last_index: this.state.max_product_per_page });
+                    this.setState({
+                        p_first_index: 0,
+                        p_last_index: this.state.max_product_per_page,
+                        l_error: false
+                    });
                 })
         }
     }
 
     handle_Update = () => {
+        this.setState({ l_error: false });
         this.props.ClearProductList();
         document.title = `Scandiweb Dev Test ${this.props.AllCategories?.length > 0 ? '|' : ''} ${this.props.AllCategories?.length > 0 ? this.props.AllCategories[this.props.CurrentCategory][0]?.toUpperCase() : ''}${this.props.AllCategories?.length > 0 ? this.props.AllCategories[this.props.CurrentCategory]?.slice(1).toLowerCase() : ''}`;
         this.getdata();
@@ -72,6 +79,10 @@ class CategoryPage extends Component {
     componentDidUpdate = (prevProps) => {
         if (prevProps.CurrentCategory !== this.props.CurrentCategory) {
             this.handle_Update();
+        } else {
+            if (this.state.error) {
+                this.handle_Update();
+            }
         }
     }
 
@@ -115,8 +126,11 @@ class CategoryPage extends Component {
                     </div>
                 </div>
                 }
-                {this.props.ProductList?.length < 0 &&
+                {this.props.ProductList?.length < 0 && this.state.l_error === false &&
                     <p className='cp_m_loading'>Loading Products...</p>
+                }
+                {this.state.l_error === true &&
+                    <p className='cp_m_loading' id='cp_m_loading'>Error Loading Products...</p>
                 }
             </main>
         )

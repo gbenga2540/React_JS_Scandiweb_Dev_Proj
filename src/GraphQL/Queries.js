@@ -57,6 +57,8 @@ export const GET_CATEGORY_PRODUCTS = ({ category }) => (
     }
 )
 
+
+// These parameters are fetched one more time incase a Person loads the description page directly from the Searchbar without clicking a Product Card, otherwise passing a few of the parameters in { GET_CATEGORY_PRODUCTS } would have been the best option to reduce the number of data being fetched.
 export const GET_PRODUCT_BY_ID = ({ ProductID }) => (
     {
         operationName: "productResolver",
@@ -64,11 +66,16 @@ export const GET_PRODUCT_BY_ID = ({ ProductID }) => (
             query productResolver {
                 product (id: "${ProductID}") {
                     id
+                    brand
                     name
                     inStock
                     gallery
-                    description
-                    brand
+                    prices {
+                        currency {
+                            symbol
+                        }
+                        amount
+                    }
                     attributes {
                         id
                         name
@@ -79,12 +86,7 @@ export const GET_PRODUCT_BY_ID = ({ ProductID }) => (
                             id
                         }
                     }
-                    prices {
-                        currency {
-                            symbol
-                        }
-                        amount
-                    }
+                    description
                 }
             }
         `
