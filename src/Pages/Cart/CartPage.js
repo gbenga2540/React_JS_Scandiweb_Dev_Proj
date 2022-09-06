@@ -12,7 +12,7 @@ class CartPage extends Component {
     }
 
     componentDidMount = () => {
-        document.title = 'Scandiweb Dev Test | Carts';
+        document.title = 'ScandiStore | Carts';
         this.props.UpdateTotalCartsTax(this.calc_tax());
         window.scrollTo(0, 0);
     }

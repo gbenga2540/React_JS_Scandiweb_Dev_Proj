@@ -4,7 +4,7 @@ import './CheckoutPage.scss';
 class CheckoutPage extends Component {
 
     componentDidMount = () => {
-        document.title = `Scandiweb Dev Test | Checkout`;
+        document.title = `ScandiStore | Checkout`;
     }
 
     render() {

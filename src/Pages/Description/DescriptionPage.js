@@ -203,7 +203,7 @@ class DescriptionPage extends Component {
     }
 
     componentDidMount = () => {
-        document.title = 'Scandiweb Dev Test | Description';
+        document.title = 'ScandiStore | Description';
         this.props.ClearCurrentProduct();
         this.setState({ productAttribs: {} });
         this.getdata();
